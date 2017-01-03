@@ -194,7 +194,7 @@ func main() {
 	body += "\n<br>" + dispenseLog
 	body += "\n<br><br><u>Office Changelog: </u>"
 	body += "\n<br>" + officeLog
-	body += "\n\n<br><br>Thanks, <br>build-bot</span><br><br>P.S. Dont reply to me I'm a bot."
+	body += "\n\n<br><br>Thanks, <br>build-bot<br><br>P.S. Dont reply to me I'm a bot.</span>"
 
 	// Setup headers
 	headers := make(map[string]string)
