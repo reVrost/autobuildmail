@@ -73,6 +73,9 @@ func getLatestVersion(ftpDir string) []string {
 	var registerPool []string
 
 	for _, v := range files {
+		if !strings.HasSuffix(v.Name(), ".zip") {
+			continue
+		}
 		if strings.HasPrefix(v.Name(), "Dispense") {
 			dispensePool = append(dispensePool, v.Name())
 		} else if strings.HasPrefix(v.Name(), "Office") {
@@ -111,7 +114,8 @@ func getLatestVersion(ftpDir string) []string {
 
 func getLatestBuildLog(directory string) string {
 	// Get office log
-	out, err := exec.Command("svn", "log", directory, "-l", "30", "--search", "zbuild").Output()
+	out, err := exec.Command("svn", "update", directory).Output()
+	out, err = exec.Command("svn", "log", directory, "-l", "30", "--search", "zbuild").Output()
 	re := regexp.MustCompile("r([0-9]+)")
 
 	//fmt.Println(re.FindAllString(string(out), 2))
@@ -168,7 +172,7 @@ func main() {
 	greet := "Hi All, <br>The latest software update has been pushed to "
 	if len(os.Args) > 1 {
 		for _, v := range os.Args[1:] {
-			greet += v + ", "
+			greet += v + " "
 		}
 	} else {
 		greet += "test "
@@ -182,7 +186,7 @@ func main() {
 	for _, v := range conf.Recipients {
 		to += (&mail.Address{Name: "", Address: v}).String() + ", "
 	}
-	subj := "Software Update Release " + time.Now().Local().Format("01/02/2006")
+	subj := "Software Update Release " + time.Now().Local().Format("02/01/2006")
 	body := "<span style=\"font-family: Calibri, sans-serif; font-size: 15;\">"
 	body += "\n" + greet
 	body += "\n\n<br><br><u>The latest software versions are:</u>"
@@ -194,7 +198,7 @@ func main() {
 	body += "\n<br>" + dispenseLog
 	body += "\n<br><br><u>Office Changelog: </u>"
 	body += "\n<br>" + officeLog
-	body += "\n\n<br><br>Thanks, <br>build-bot<br><br>P.S. Dont reply to me I'm a bot.</span>"
+	body += "\n\n<br><br>Regards, <br>build-bot<br><br>P.S. Dont reply to me I'm a bot.</span>"
 
 	// Setup headers
 	headers := make(map[string]string)
